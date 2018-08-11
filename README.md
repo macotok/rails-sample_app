@@ -1,3 +1,36 @@
+## rails Tutorial
+
+[第4章 Rails風味のRuby](https://railstutorial.jp/chapters/rails_flavored_ruby?version=5.1#cha-rails_flavored_ruby)
+
+## カスタムヘルパー
+
+ページタイトルを生成するメソッドを作成
+
+app/helpers/application_helper.rb
+
+```ruby
+module ApplicationHelper
+
+  # ページごとの完全なタイトルを返します。
+  def full_title(page_title = '')
+    base_title = "Ruby on Rails Tutorial Sample App"
+    if page_title.empty?
+      base_title
+    else
+      page_title + " | " + base_title
+    end
+  end
+end
+```
+
+app/views/layouts/application.html.erb
+
+```ruby
+<title><%= full_title(yield(:title)) %></title>
+```
+
+
+
 ## rails tutorial
 
 [第3章 ほぼ静的なページの作成](https://railstutorial.jp/chapters/static_pages?version=5.1#cha-static_pages)
