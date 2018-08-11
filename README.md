@@ -116,6 +116,17 @@ end
 assert_select "title", "Home | Ruby on Rails Tutorial Sample App"
 ```
 
+### テスト内容3
+
+root_urlが正しいかのテスト
+
+```ruby
+test "should get root" do
+  get root_url
+  assert_response :success
+end
+```
+
 ### テスト実行
 
 ```terminal
