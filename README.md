@@ -1,4 +1,4 @@
-## rails Tutorial
+# rails Tutorial
 
 [第4章 Rails風味のRuby](https://railstutorial.jp/chapters/rails_flavored_ruby?version=5.1#cha-rails_flavored_ruby)
 
@@ -29,9 +29,7 @@ app/views/layouts/application.html.erb
 <title><%= full_title(yield(:title)) %></title>
 ```
 
-
-
-## rails tutorial
+# rails tutorial
 
 [第3章 ほぼ静的なページの作成](https://railstutorial.jp/chapters/static_pages?version=5.1#cha-static_pages)
 
