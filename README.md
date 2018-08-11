@@ -169,6 +169,35 @@ end
 <title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
 ```
 
+### layoutファイルで管理
+
+app/views/layouts/application.html.erb
+
+```<%= yield %>```は各viewファイルの記述が読み込まれる
+
+```ruby
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
+```
+
+app/views/static_pages/home.html.erb
+
+```
+<% provide(:title, "Home") %>
+<h1>Sample App</h1>
+<p>
+  This is the home page for the
+  <a href="https://railstutorial.jp/">Ruby on Rails Tutorial</a>
+  sample application.
+</p>
+```
 
 
 ## 短縮形
