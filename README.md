@@ -57,3 +57,22 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 ```terminal
 $ bundle install --without production
 ```
+
+## 静的ページを作る
+
+StaticPagesコントローラーを生成
+home、helpアクションを生成
+
+```terminal
+$ rails generate controller StaticPages home help
+```
+
+## 短縮形
+
+|完全なコマンド|短縮形|
+|---|---|
+|$ rails server|$ rails s|
+|$ rails console|$ rails c|
+|$ rails generate|$ rails g|
+|$ rails test|$ rails t|
+|$ bundle install|$ bundle|
