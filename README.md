@@ -81,6 +81,51 @@ $ rails db:rollback // 1つ前の状態に戻る
 $ rails db:migrate VERSION=0 // 最初の状態に戻る
 ```
 
+## テストを行う前に
+
+### テスト結果を色で判別
+
+テストが```成功/失敗```で色を```緑/赤```に設定する
+
+```ruby
+ENV['RAILS_ENV'] ||= 'test'
+require_relative '../config/environment'
+require 'rails/test_help'
+require "minitest/reporters" #追加
+Minitest::Reporters.use! #追加
+
+class ActiveSupport::TestCase
+  fixtures :all
+end
+```
+
+### Guardで自動テスト
+
+コマンドでテスト実行するのではなく、ファイル変更時に自動でテスト実行する
+
+```terminal
+$ bundle exec guard init
+```
+
+Guardfileファイル更新
+
+下記ファイルのコードをコピー
+
+[https://bitbucket.org/railstutorial/sample_app_4th_ed/raw/289fcb83f1cd72b51c05fe9319277d590d51f0d2/Guardfile](https://bitbucket.org/railstutorial/sample_app_4th_ed/raw/289fcb83f1cd72b51c05fe9319277d590d51f0d2/Guardfile)
+
+```.gitignore```でspringディレクトリ配下をgit管理させない
+
+```
+# Ignore Spring files.
+/spring/*.pid
+```
+
+Guard実行
+
+```terminal
+$ bundle exec guard
+```
+
 ## テスト
 
 ```rails generate controller```でテストファイルが作られる
