@@ -60,19 +60,19 @@ $ bundle install --without production
 
 ## 静的ページを作る
 
-StaticPagesコントローラーを生成
-home、helpアクションを生成
+ - StaticPagesコントローラーを生成
+ - home、helpアクションを生成
 
 ```terminal
 $ rails generate controller StaticPages home help
 ```
 
-viewファイルが生成
+viewファイルを生成
 
-- app/views/static_pages/home.html.erb
-- app/views/static_pages/help.html.erb
+ - app/views/static_pages/home.html.erb
+ - app/views/static_pages/help.html.erb
 
-元に戻したときのコマンド
+元に戻したいときのコマンド
 
 ```terminal
 $ rails destroy  controller StaticPages home help
@@ -83,13 +83,13 @@ $ rails db:migrate VERSION=0 // 最初の状態に戻る
 
 ## テスト
 
-rails generate controller実行でテストファイルが作られる
+```rails generate controller```でテストファイルが作られる
 
 test/controllers/static_pages_controller_test.rb
 
 ### テスト内容1
 
-「Homeページのテスト。GETリクエストをhomeアクションに対して発行 (=送信) せよ。そうすれば、リクエストに対するレスポンスは[成功]になるはず。」
+「Homeページのテスト。GETリクエストをhomeアクションに対して送信。リクエストに対するレスポンスは成功」
 
 ```ruby
 require 'test_helper'
@@ -122,7 +122,7 @@ assert_select "title", "Home | Ruby on Rails Tutorial Sample App"
 $ rails test
 ```
 
-テスト成功
+テスト成功の場合
 
 ```terminal
 2 runs, 2 assertions, 0 failures, 0 errors, 0 skips
