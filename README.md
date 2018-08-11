@@ -67,6 +67,67 @@ home、helpアクションを生成
 $ rails generate controller StaticPages home help
 ```
 
+viewファイルが生成
+
+- app/views/static_pages/home.html.erb
+- app/views/static_pages/help.html.erb
+
+元に戻したときのコマンド
+
+```terminal
+$ rails destroy  controller StaticPages home help
+$ rails destroy model User
+$ rails db:rollback // 1つ前の状態に戻る
+$ rails db:migrate VERSION=0 // 最初の状態に戻る
+```
+
+## テスト
+
+rails generate controller実行でテストファイルが作られる
+
+test/controllers/static_pages_controller_test.rb
+
+### テスト内容1
+
+「Homeページのテスト。GETリクエストをhomeアクションに対して発行 (=送信) せよ。そうすれば、リクエストに対するレスポンスは[成功]になるはず。」
+
+```ruby
+require 'test_helper'
+
+class StaticPagesControllerTest < ActionDispatch::IntegrationTest
+  test "should get home" do
+    get static_pages_home_url
+    assert_response :success
+  end
+
+  test "should get help" do
+    get static_pages_help_url
+    assert_response :success
+  end
+
+end
+```
+
+### テスト内容2
+
+<title>タグ内に「Home | Ruby on Rails Tutorial Sample App」という文字列があるかどうかをチェック
+
+```ruby
+assert_select "title", "Home | Ruby on Rails Tutorial Sample App"
+```
+
+### テスト実行
+
+```terminal
+$ rails test
+```
+
+テスト成功
+
+```terminal
+2 runs, 2 assertions, 0 failures, 0 errors, 0 skips
+```
+
 ## 短縮形
 
 |完全なコマンド|短縮形|
