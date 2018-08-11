@@ -160,6 +160,16 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 end
 ```
 
+## 埋め込みRuby
+
+### provideメソッド
+
+```ruby
+<% provide(:title, "Home") %>
+<title><%= yield(:title) %> | Ruby on Rails Tutorial Sample App</title>
+```
+
+
 
 ## 短縮形
 
