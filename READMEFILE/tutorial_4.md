@@ -440,3 +440,21 @@ inspectのショートカットpメソッド
 >> p :name             # 'puts :name.inspect' と同じ
 :name
 ```
+
+## CSSファイル読み込みについて
+
+```ruby
+stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+```
+
+- メソッド呼び出しで丸カッコは不要(stylesheet_link_tag())
+- メッシュ呼び出しの最後の引数はハッシュ不要({media: 'all', 'data-turbolinks-track': 'reload'})
+- 途中で改行されても空白行とはみなさない
+- 第一引数の文字列はスタイルシートへのパス
+
+実際のHTMLソース
+
+```ruby
+<link data-turbolinks-track="true" href="/assets/application.css"
+media="all" rel="stylesheet" />
+```
