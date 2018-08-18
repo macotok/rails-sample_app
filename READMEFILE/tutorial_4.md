@@ -303,3 +303,140 @@ to_aは配列に変換するメソッド
 >> ('a'..'e').to_a
 => ["a", "b", "c", "d", "e"]
 ```
+
+### each
+
+```terminal
+>> (1..5).each { |i| puts 2 * i } # 1行のとき {}
+2
+4
+6
+8
+10
+=> 1..5
+
+>> (1..5).each do |i| # 複数行のとき do end
+?>   puts 2 * i
+>> end
+2
+4
+6
+8
+10
+=> 1..5
+```
+
+### times
+
+```terminal
+>> 3.times { puts "Betelgeuse!" }   # 3.timesではブロックに変数を使っていない
+"Betelgeuse!"
+"Betelgeuse!"
+"Betelgeuse!"
+=> 3
+```
+
+### map
+
+```terminal
+>> (1..5).map { |i| i**2 }          # 「**」記法は冪乗 (べき乗)
+=> [1, 4, 9, 16, 25]
+
+>> %w[a b c]                        # %w で文字列の配列を作成
+=> ["a", "b", "c"]
+
+>> %w[a b c].map { |char| char.upcase }
+=> ["A", "B", "C"]
+
+>> %w[A B C].map { |char| char.downcase }
+=> ["a", "b", "c"]
+
+>> %w[A B C].map(&:downcase) # 省略記法
+=> ["a", "b", "c"]
+```
+
+### ハッシュ(連想配列)
+
+ハッシュの波カッコは、ブロックの波カッコとはまったく別物である
+
+```terminal
+>> user = {}                          # {}は空のハッシュ
+=> {}
+>> user["first_name"] = "Michael"     # キーが "first_name" で値が "Michael"
+=> "Michael"
+>> user["last_name"] = "Hartl"        # キーが "last_name" で値が "Hartl"
+=> "Hartl"
+>> user["first_name"]                 # 要素へのアクセスは配列の場合と似ている
+=> "Michael"
+>> user                               # ハッシュのリテラル表記
+=> {"last_name"=>"Hartl", "first_name"=>"Michael"}
+
+>> user = { "first_name" => "Michael", "last_name" => "Hartl" }
+=> {"last_name"=>"Hartl", "first_name"=>"Michael"}
+```
+
+### シンボルを使ったハッシュ
+
+```terminal
+>> user = { :name => "Michael Hartl", :email => "michael@example.com" }
+=> {:name=>"Michael Hartl", :email=>"michael@example.com"}
+>> user[:name]              # :name に対応する値にアクセスする
+=> "Michael Hartl"
+>> user[:password]          # 未定義のキーに対応する値にアクセスする
+=> nil
+```
+
+コロンとハッシュロケット
+
+```terminal
+>> h1 = { :name => "Michael Hartl", :email => "michael@example.com" }
+=> {:name=>"Michael Hartl", :email=>"michael@example.com"}
+>> h2 = { name: "Michael Hartl", email: "michael@example.com" }
+=> {:name=>"Michael Hartl", :email=>"michael@example.com"}
+>> h1 == h2
+=> true
+```
+
+### ハッシュとeach
+
+```terminal
+>> flash = { success: "It worked!", danger: "It failed." }
+=> {:success=>"It worked!", :danger=>"It failed."}
+>> flash.each do |key, value|
+?>   puts "Key #{key.inspect} has value #{value.inspect}"
+>> end
+
+Key :success has value "It worked!"
+Key :danger has value "It failed."
+```
+
+### inspect
+
+オブジェクトを表現する文字列を返す
+
+```terminal
+>> puts (1..5).to_a            # 配列を文字列として出力
+1
+2
+3
+4
+5
+
+>> puts (1..5).to_a.inspect    # 配列のリテラルを出力
+[1, 2, 3, 4, 5]
+
+>> puts :name, :name.inspect
+name
+:name
+
+>> puts "It worked!", "It worked!".inspect
+It worked!
+"It worked!"
+```
+
+inspectのショートカットpメソッド
+
+```terminal
+>> p :name             # 'puts :name.inspect' と同じ
+:name
+```
