@@ -458,3 +458,98 @@ stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reloa
 <link data-turbolinks-track="true" href="/assets/application.css"
 media="all" rel="stylesheet" />
 ```
+
+## クラス
+
+Rubyは多くのオブジェクト指向言語と同様、メソッドをまとめるのにクラスを使っています。
+これらのクラスからインスタンスが生成されることでオブジェクトが作成されます。
+
+### コンストラクタ
+
+ダブルクォートは文字列のコンストラクタ
+
+```terminal
+>> s = "foobar"
+=> "foobar"
+>> s.class
+=> String
+```
+
+名前付きコンストラクタはnewメソッド呼び出す
+
+文字列
+
+```terminal
+>> s = String.new("foobar")
+=> "foobar"
+>> s.class
+=> String
+>> s == "foobar"
+=> true
+```
+
+配列
+
+``` terminal
+>> a = Array.new([1, 3, 2])
+=> [1, 3, 2]
+```
+
+ハッシュ
+
+```terminal
+>> h = Hash.new
+=> {}
+>> h[:foo]            # 存在しないキー (:foo) の値にアクセスしてみる
+=> nil
+>> h = Hash.new(0)    # 存在しないキーのデフォルト値をnilから0にする
+=> {}
+>> h[:foo]
+=> 0
+```
+
+### クラス継承
+
+Rubyにおけるすべてのクラスは最終的にスーパークラスを持たないBasicObjectクラスを継承
+
+``` terminal
+>> s = String.new("foobar")
+=> "foobar"
+
+>> s.class                        # 変数sのクラスを調べる
+=> String
+
+>> s.class.superclass             # Stringクラスの親クラスを調べる
+=> Object
+
+>> s.class.superclass.superclass  # Ruby 1.9からBasicObjectが導入
+=> BasicObject
+
+>> s.class.superclass.superclass.superclass
+=> nil
+```
+
+Wordクラスを定義
+
+```terminal
+>> class Word < String
+>>   def palindrome?
+>>     self == self.reverse # selfは文字列自身を表します
+>>   end
+>> end
+=> :palindrome?
+
+>> s = Word.new("level")
+=> "level"
+>> s.palindrome?
+=> true
+>> s.length
+=> 5
+
+>> s.class
+=> Word
+>> s.class.superclass
+=> String
+>> s.class.superclass.superclass
+=> Object
+```
