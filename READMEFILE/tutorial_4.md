@@ -441,6 +441,24 @@ inspectのショートカットpメソッド
 :name
 ```
 
+### blankとempty
+
+Railsはblank?メソッドをRubyに追加
+
+```terminal
+>> "".blank?
+=> true
+
+>> "      ".empty?
+=> false
+
+>> "      ".blank?
+=> true
+
+>> nil.blank?
+=> true
+```
+
 ## CSSファイル読み込みについて
 
 ```ruby
@@ -552,4 +570,57 @@ Wordクラスを定義
 => String
 >> s.class.superclass.superclass
 => Object
+```
+
+### controllerの継承関係
+
+``` terminal
+>> controller = StaticPagesController.new
+=> #<StaticPagesController:0x22855d0>
+>> controller.class
+=> StaticPagesController
+>> controller.class.superclass
+=> ApplicationController
+>> controller.class.superclass.superclass
+=> ActionController::Base
+>> controller.class.superclass.superclass.superclass
+=> ActionController::Metal
+>> controller.class.superclass.superclass.superclass.superclass
+=> AbstractController::Base
+>> controller.class.superclass.superclass.superclass.superclass.superclass
+=> Object
+```
+
+### Userクラスを作ってみる
+
+```ruby
+class User
+  attr_accessor :name, :email
+
+  def initialize(attributes = {})
+    @name  = attributes[:name]
+    @email = attributes[:email]
+  end
+
+  def formatted_email
+    "#{@name} <#{@email}>"
+  end
+end
+```
+
+``` terminal
+>> require './example_user'
+=> true
+
+>> example = User.new
+=> #<User:0x224ceec @email=nil, @name=nil>
+
+>> example.name = "Example User"
+=> "Example User"
+
+>> example.email = "user@example.com"
+=> "user@example.com"
+
+>> example.formatted_email
+=> "Example User <user@example.com>"
 ```
