@@ -28,3 +28,26 @@ HTMLのソース
 
  - ファイル名が重ならないようにするために「9308b8f92fea4c19a3a0d8385b494526」という文字列をRailsが追加している
  - src属性には "images" というディレクトリ名が含まれていない。これはassetsディレクトリ内の他のディレクトリ (imagesやjavascripts、stylesheetsなど) も同様。これは高速化のための仕組みで、Railsはassetsディレクトリ直下の画像をapp/assets/imagesディレクトリにある画像と紐付けている。このようなフラットなディレクトリ構成を採っていると、ファイルをより高速にブラウザに渡すことができる。
+
+ ## Sass
+
+### bootstrapを適用
+
+Gemfileに「bootstrap-sass」を追加
+
+``` ruby:Gemfile
+gem 'bootstrap-sass', '3.3.7'
+```
+
+``` terminal
+$ bundle install
+```
+
+``` css:app/assets/stylesheets/custom.scss
+@import "bootstrap-sprockets";
+@import "bootstrap";
+```
+
+### application.css
+
+```app/assets/stylesheets/```に置かれたスタイルシートはapplication.cssの一部としてWebサイトのレイアウトに読み込まれる。
