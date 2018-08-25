@@ -29,7 +29,16 @@ HTMLのソース
  - ファイル名が重ならないようにするために「9308b8f92fea4c19a3a0d8385b494526」という文字列をRailsが追加している
  - src属性には "images" というディレクトリ名が含まれていない。これはassetsディレクトリ内の他のディレクトリ (imagesやjavascripts、stylesheetsなど) も同様。これは高速化のための仕組みで、Railsはassetsディレクトリ直下の画像をapp/assets/imagesディレクトリにある画像と紐付けている。このようなフラットなディレクトリ構成を採っていると、ファイルをより高速にブラウザに渡すことができる。
 
- ## Sass
+### render(パーシャル)
+
+``` ruby
+<%= render 'layouts/shim' %>
+```
+
+上記のrenderだと```app/views/layouts/_shim.html.erb```を探す。
+ファイル名の先頭のアンダースコアは、パーシャルで使う普遍的な命名規約。
+
+## Sass
 
 ### bootstrapを適用
 
