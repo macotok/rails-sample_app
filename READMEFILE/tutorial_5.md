@@ -59,7 +59,7 @@ $ bundle install
 
 ### application.css
 
-```app/assets/stylesheets/```に置かれたスタイルシートはapplication.cssの一部としてWebサイトのレイアウトに読み込まれる。
+app/assets/stylesheets/に置かれたスタイルシートはapplication.cssの一部としてWebサイトのレイアウトに読み込まれる。
 
 ## アセットパイプライン
 
@@ -84,7 +84,7 @@ Railsのアセットパイプラインでは、静的ファイルを目的別に
 *= require_self
 ```
 
-```*= require_tree .```はapp/assets/stylesheetsディレクトリ (サブディレクトリを含む) 中のすべてのCSSファイルが、アプリケーションCSSに含まれる。
+```*= require_tree .```はapp/assets/stylesheetsディレクトリ (サブディレクトリを含む) 中のすべてのCSSファイルが、application.cssに含まれる。
 
 ```*= require_self```はCSSの読み込みシーケンスの中でapplication.css自身もその対象に含めている。
 
@@ -92,8 +92,8 @@ Railsのアセットパイプラインでは、静的ファイルを目的別に
 
 必要なアセットをディレクトリに配置してまとめた後、Railsはさまざまなプリプロセッサエンジンを介してそれらを実行し、ブラウザに配信できるようにする。
 
-Railsはどのプリプロセッサを使うのかを、ファイル名の拡張子を使って判断します。
-最も一般的な拡張子は、Sass用の.scss、CoffeeScript用の.coffee、埋め込みRuby (ERb) 用の.erbです。
+Railsはどのプリプロセッサを使うのかを、ファイル名の拡張子を使って判断する。
+最も一般的な拡張子は、Sass用の```.scss```、CoffeeScript用の```.coffee```、埋め込みRuby (ERb) 用の```.erb```です。
 
 例)
 
@@ -137,7 +137,7 @@ Rails.application.routes.draw do
 end
 ```
 
-getルールを使うとルートURLのときと同様に、help_pathやhelp_urlといった名前付きルートも使えるようになります。
+getルールを使うと```help_path```や```help_url```といった名前付きルートも使えるようになる。
 
 ```
 help_path -> '/help'
@@ -163,8 +163,8 @@ $ rails generate integration_test site_layout
 
 ### テスト内容
 
-1. ルートURL (Homeページ) にGETリクエストを送る.
-2. 正しいページテンプレートが描画されているかどうか確かめる.
+1. ルートURL (Homeページ) にGETリクエストを送る。
+2. 正しいページテンプレートが描画されているかどうか確かめる。
 3. Home、Help、About、Contactの各ページへのリンクが正しく動くか確かめる。
 
 ```ruby:test/integration/site_layout_test.rb
@@ -184,7 +184,7 @@ end
 ```
 
 - Railsは自動的にはてなマーク "?" をpathに置換している
-- count2はルートURLへのリンクが2つ存在しているため
+- ```count: 2```はルートURLへのリンクが2つ存在しているため
 
 テスト実行
 
@@ -194,7 +194,7 @@ $ rails test:integration
 
 ## ユーザー登録
 
-### Usersコントローラー
+Usersコントローラーの作成
 
 ``` terminal
 $ rails generate controller Users new
