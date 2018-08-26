@@ -60,3 +60,42 @@ $ bundle install
 ### application.css
 
 ```app/assets/stylesheets/```に置かれたスタイルシートはapplication.cssの一部としてWebサイトのレイアウトに読み込まれる。
+
+## アセットパイプライン
+
+### アセットディレクトリ
+
+Railsのアセットパイプラインでは、静的ファイルを目的別に分類する、標準的な3つのディレクトリが使われている。
+
+- app/assets: 現在のアプリケーション固有のアセット
+- lib/assets: あなたの開発チームによって作成されたライブラリ用のアセット
+- vendor/assets: サードパーティのアセット
+
+### マニフェストファイル
+
+静的ファイルをそれぞれ配置すれば、マニフェストファイルを使って、それらをどのように1つのファイルにまとめるのかをRailsに指示することができます。
+なお、実際にアセットをまとめる処理を行うのはSprocketsというgemです。
+また、マニフェストファイルはCSSとJavaScriptに適用される。
+
+#### CSS用のマニフェストファイル
+
+```css:app/assets/stylesheets/application.css
+*= require_tree .
+*= require_self
+```
+
+```*= require_tree .```はapp/assets/stylesheetsディレクトリ (サブディレクトリを含む) 中のすべてのCSSファイルが、アプリケーションCSSに含まれる。
+
+```*= require_self```はCSSの読み込みシーケンスの中でapplication.css自身もその対象に含めている。
+
+### プリプロセッサエンジン
+
+必要なアセットをディレクトリに配置してまとめた後、Railsはさまざまなプリプロセッサエンジンを介してそれらを実行し、ブラウザに配信できるようにする。
+
+Railsはどのプリプロセッサを使うのかを、ファイル名の拡張子を使って判断します。
+最も一般的な拡張子は、Sass用の.scss、CoffeeScript用の.coffee、埋め込みRuby (ERb) 用の.erbです。
+
+例)
+
+- foobar.js.coffee
+- foobar.js.erb.coffee (この例ではCoffeeScriptが最初に実行される) 
