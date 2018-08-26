@@ -143,3 +143,10 @@ getルールを使うとルートURLのときと同様に、help_pathやhelp_url
 help_path -> '/help'
 help_url  -> 'http://www.example.com/help'
 ```
+
+html.erbに適用
+
+```ruby
+<li><%= link_to "Home", root_path %></li>
+<li><%= link_to "Help", help_path %></li>
+```
