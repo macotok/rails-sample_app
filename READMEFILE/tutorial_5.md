@@ -98,4 +98,48 @@ Railsはどのプリプロセッサを使うのかを、ファイル名の拡張
 例)
 
 - foobar.js.coffee
-- foobar.js.erb.coffee (この例ではCoffeeScriptが最初に実行される) 
+- foobar.js.erb.coffee (この例ではCoffeeScriptが最初に実行される)
+
+## レイアウトのリンク
+
+名前付きルートを使って指定
+
+``` ruby
+<%= link_to "About", about_path %>
+```
+
+### サイトリンクのルーティングとURLのマッピング
+
+| ページ名 | URL | 名前付きルート |
+----|----|----
+|Home|/|root_path|
+|About|/about|about_path|
+|Help|/help|help_path|
+|Contact|/contact|contact_path|
+|Sign up|/signup|signup_path|
+|Log in|/login|login_path|
+
+### ルートURL
+
+基本的には_path書式を使い、リダイレクトの場合のみ_url書式を使う。
+
+```
+root_path -> '/'
+root_url  -> 'http://www.example.com/'
+```
+
+```ruby:config/routes.rb
+Rails.application.routes.draw do
+  root 'static_pages#home'
+  get '/help', to: 'static_pages/help'
+  get '/about', to: 'static_pages/about'
+  get '/contact', to: 'static_pages/contact'
+end
+```
+
+getルールを使うとルートURLのときと同様に、help_pathやhelp_urlといった名前付きルートも使えるようになります。
+
+```
+help_path -> '/help'
+help_url  -> 'http://www.example.com/help'
+```
