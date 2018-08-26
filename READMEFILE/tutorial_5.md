@@ -150,3 +150,44 @@ html.erbに適用
 <li><%= link_to "Home", root_path %></li>
 <li><%= link_to "Help", help_path %></li>
 ```
+
+## 統合テスト
+
+ファイル生成
+
+```terminal
+$ rails generate integration_test site_layout
+      invoke  test_unit
+      create    test/integration/site_layout_test.rb
+```
+
+### テスト内容
+
+1. ルートURL (Homeページ) にGETリクエストを送る.
+2. 正しいページテンプレートが描画されているかどうか確かめる.
+3. Home、Help、About、Contactの各ページへのリンクが正しく動くか確かめる。
+
+```ruby:test/integration/site_layout_test.rb
+require 'test_helper'
+
+class SiteLayoutTest < ActionDispatch::IntegrationTest
+
+  test "layout links" do
+    get root_path
+    assert_template 'static_pages/home'
+    assert_select "a[href=?]", root_path, count: 2
+    assert_select "a[href=?]", help_path
+    assert_select "a[href=?]", about_path
+    assert_select "a[href=?]", contact_path
+  end
+end
+```
+
+- Railsは自動的にはてなマーク "?" をpathに置換している
+- count2はルートURLへのリンクが2つ存在しているため
+
+テスト実行
+
+```terminal
+$ rails test:integration
+```
