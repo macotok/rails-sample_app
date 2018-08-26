@@ -191,3 +191,11 @@ end
 ```terminal
 $ rails test:integration
 ```
+
+## ユーザー登録
+
+### Usersコントローラー
+
+``` terminal
+$ rails generate controller Users new
+```
