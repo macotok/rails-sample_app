@@ -61,6 +61,10 @@ end
 $ rails db:migrate
 ```
 
+マイグレーション適用で```development.sqlite3```が更新される。
+また、```app/models/user.rb```が作成される
+
+
 ### マイグレーションを元に戻す
 
 ```terminal
@@ -69,3 +73,88 @@ $ rails db:rollback
 
 - drop_tableが適用されるので```db/schema.rb```が空になる
 - あるカラムを削除する場合は、changeメソッドの代わりに、upとdownのメソッドを別々に定義する
+
+## ユーザーオブジェクトを作成する
+
+Railsコンソールでモデルの操作が可能
+
+```terminal
+$ rails console --sandbox
+```
+
+sandboxをつけることで「データベースへの変更をコンソールの終了時にすべて “ロールバック” (取り消し) する」設定になる
+
+### User.new
+
+User.newで新しいオブジェクトを生成
+
+```terminal
+>> user = User.new(name: "Michael Hartl", email: "mhartl@example.com")
+=> #<User id: nil, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: nil, updated_at: nil>
+```
+
+userオブジェクトが有効かどうかを確認
+
+```terminal
+>> user.valid?
+true
+```
+
+### User.save
+
+現時点ではまだデータベースにデータは格納されていません。
+つまり、User.newはメモリ上でオブジェクトを作成しただけです。
+
+データベースにUserオブジェクトを保存するためには、userオブジェクトからsaveメソッドを呼び出す必要があります。
+
+```terminal
+>> user.save
+   (0.1ms)  SAVEPOINT active_record_1
+  SQL (0.8ms)  INSERT INTO "users" ("name", "email", "created_at",
+  "updated_at") VALUES (?, ?, ?, ?)  [["name", "Michael Hartl"],
+  ["email", "mhartl@example.com"], ["created_at", 2016-05-23 19:05:58 UTC],
+  ["updated_at", 2016-05-23 19:05:58 UTC]]
+   (0.1ms)  RELEASE SAVEPOINT active_record_1
+=> true
+```
+
+saveメソッドは、成功すればtrueを、失敗すればfalseを返す。
+
+```terminal
+>> user
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
+```
+
+saveメソッド後、```id```、```created_at```、```updated_at```に値が入る。
+
+### User.create
+
+Active RecordではUser.createでモデルの生成と保存を同時におこなう方法も提供されている
+
+```terminal
+>> User.create(name: "A Nother", email: "another@example.org")
+#<User id: 2, name: "A Nother", email: "another@example.org", created_at:
+"2016-05-23 19:18:46", updated_at: "2016-05-23 19:18:46">
+```
+
+User.createは、trueかfalseを返す代わりに、ユーザーオブジェクト自身を返す
+
+### User.destroy
+
+```terminal
+>> foo = User.create(name: "Foo", email: "foo@bar.com")
+#<User id: 3, name: "Foo", email: "foo@bar.com", created_at: "2016-05-23
+19:19:06", updated_at: "2016-05-23 19:19:06">
+
+>> foo.destroy
+   (0.1ms)  SAVEPOINT active_record_1
+  SQL (0.2ms)  DELETE FROM "users" WHERE "users"."id" = ?  [["id", 3]]
+   (0.1ms)  RELEASE SAVEPOINT active_record_1
+=> #<User id: 3, name: "Foo", email: "foo@bar.com", created_at: "2016-05-23
+19:19:06", updated_at: "2016-05-23 19:19:06">
+```
+
+- createと同じようにdestroyはそのオブジェクト自身を返しますが、その戻り値を使ってもう一度destroyを呼ぶことはできません。
+- 削除されたオブジェクトはまだメモリ上には残っている(```>> foo```)
