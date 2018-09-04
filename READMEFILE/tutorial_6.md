@@ -202,3 +202,46 @@ updated_at: "2016-05-23 19:18:46">]>
 >> User.all.length
 => 2
 ```
+
+### 更新
+
+.save
+
+``` terminal
+>> user           # userオブジェクトが持つ情報のおさらい
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
+>> user.email = "mhartl@example.net"
+=> "mhartl@example.net"
+>> user.save
+=> true
+```
+
+.saveをしないと更新されない
+
+``` terminal
+>> user.email
+=> "mhartl@example.net"
+>> user.email = "foo@bar.com"
+=> "foo@bar.com"
+>> user.reload.email
+=> "mhartl@example.net"
+```
+
+.update_attributes
+
+``` terminal
+>> user.update_attributes(name: "The Dude", email: "dude@abides.org")
+=> true
+>> user.name
+=> "The Dude"
+>> user.email
+=> "dude@abides.org"
+```
+
+``` terminal
+>> user.update_attribute(:name, "El Duderino")
+=> true
+>> user.name
+=> "El Duderino"
+```
