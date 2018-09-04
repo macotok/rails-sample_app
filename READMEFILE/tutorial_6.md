@@ -245,3 +245,32 @@ created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
 >> user.name
 => "El Duderino"
 ```
+
+## validationとテスト駆動開発
+
+### Userオブジェクトが有効か
+
+ - setupは各テストが走る直前で実行される
+ - @userはインスタンス変数
+ - valid?は有効かを判定
+
+``` ruby:test/model/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+
+  test "should be valid" do
+    assert @user.valid?
+  end
+end
+```
+
+test実行
+
+``` terminal
+$ rails test:models
+```
