@@ -158,3 +158,47 @@ User.createは、trueかfalseを返す代わりに、ユーザーオブジェク
 
 - createと同じようにdestroyはそのオブジェクト自身を返しますが、その戻り値を使ってもう一度destroyを呼ぶことはできません。
 - 削除されたオブジェクトはまだメモリ上には残っている(```>> foo```)
+
+### 検索
+
+.find
+
+``` terminal
+>> User.find(1)
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
+```
+
+.find_by
+
+``` terminal
+>> User.find_by(email: "mhartl@example.com")
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
+```
+
+.first
+
+``` terminal
+>> User.first
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 19:05:58", updated_at: "2016-05-23 19:05:58">
+```
+
+.all
+
+``` terminal
+>> User.all
+=> #<ActiveRecord::Relation [#<User id: 1, name: "Michael Hartl",
+email: "mhartl@example.com", created_at: "2016-05-23 19:05:58",
+updated_at: "2016-05-23 19:05:58">, #<User id: 2, name: "A Nother",
+email: "another@example.org", created_at: "2016-05-23 19:18:46",
+updated_at: "2016-05-23 19:18:46">]>
+```
+
+その他、オブジェクトなので```.length```も使える
+
+``` terminal
+>> User.all.length
+=> 2
+```
