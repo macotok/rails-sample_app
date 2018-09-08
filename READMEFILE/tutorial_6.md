@@ -275,7 +275,7 @@ test実行
 $ rails test:models
 ```
 
-### 存在性を検証するpresence
+### validate presence
 
 ユーザーがデータベースに保存される前にnameとemailフィールドの両方が存在することを保証する場合
 
@@ -322,4 +322,38 @@ error messageを表示
 
 >> user.errors.messages[:email]
 => ["can't be blank"]
+```
+
+### validate length
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+
+  .
+  .
+  ,
+
+  test "name should not be too lond" do
+    @user.name = "a" * 51
+    assert_not @user.valid?
+  end
+
+  test "email should not be too long" do
+    @user.email = "a" * 244 + "@example.com"
+    assert_not @user.valid?
+  end
+end
+```
+
+``` ruby:app/models/user.rb
+class User < ApplicationRecord
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :email, presence: true, length: { maximum: 255 }
+end
 ```
