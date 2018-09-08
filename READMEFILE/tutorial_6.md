@@ -357,3 +357,62 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 }
 end
 ```
+
+### validates format mail-address
+
+有効なメールフォーマットと無効なメールフォーマットをテスト
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+
+  .
+  .
+  ,
+
+  test "email validation should accept valid addresses" do
+    valid_addresses = %w[uesr@example.com USER@foo.COM A_US-ER@foo.bar.org first.last@foo.jp alice+bob@baz.cn]
+    valid_addresses.each do |valid_address|
+      @user.email = valid_address
+      assert @user.valid?, "#{valid_address.inspect} should be valid"
+    end
+  end
+
+  test "email validation should reject invalid addresses" do
+    invalid_addresses = %w[uesr@example,com user_at_foo.org user.name@example. foo@bar_baz.com foo@bar+baz.com foo@bar..com]
+    invalid_addresses.each do |invalid_address|
+      @user.email = invalid_address
+      assert_not @user.valid?, "#{invalid_address.inspect} should be invalid"
+    end
+  end
+end
+```
+
+``` ruby:app/models/user.rb
+class User < ApplicationRecord
+  validates :name, presence: true, length: { maximum: 50 }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
+end
+```
+
+メールアドレスが有効かを調べ正規表現
+
+| 正規表現 | 意味 |
+----|----
+|/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i | (完全な正規表現)|
+|/ | 正規表現の開始を示す |
+|\A |	文字列の先頭 |
+|[\w+\-.]+ | 英数字、アンダースコア (_)、プラス (+)、ハイフン (-)、ドット (.) のいずれかを少なくとも1文字以上繰り返す|
+|@ | アットマーク|
+| [a-z\d\-.]+ | 英小文字、数字、ハイフン、ドットのいずれかを少なくとも1文字以上繰り返す|
+|\. | ドット|
+|[a-z]+ | 英小文字を少なくとも1文字以上繰り返す|
+|\z | 文字列の末尾|
+|/ | 正規表現の終わりを示す|
+|i | 大文字小文字を無視するオプション|
