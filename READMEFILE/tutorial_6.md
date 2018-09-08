@@ -274,3 +274,52 @@ test実行
 ``` terminal
 $ rails test:models
 ```
+
+### 存在性を検証するpresence
+
+ユーザーがデータベースに保存される前にnameとemailフィールドの両方が存在することを保証する場合
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+
+  test "should be valid" do
+    assert @user.valid?
+  end
+
+  test "name should be present" do
+    @user.name = ""
+    assert_not @user.valid?
+  end
+
+  test "email should be present" do
+    @user.email = ""
+    assert_not @user.valid?
+  end
+end
+```
+
+``` ruby:app/models/user.rb
+class User < ApplicationRecord
+  validates :name,  presence: true
+  validates :email, presence: true
+end
+```
+
+error messageを表示
+
+``` terminal
+>> user.errors.full_messages
+=> ["Name can't be blank"]
+
+>> user.errors.messages
+=> {:name=>["can't be blank"], :email=>["can't be blank"]}
+
+>> user.errors.messages[:email]
+=> ["can't be blank"]
+```
