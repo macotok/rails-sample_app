@@ -644,3 +644,40 @@ class UserTest < ActiveSupport::TestCase
   end
 end
 ```
+
+## Userの作成と認証
+
+データベースに新規ユーザーを1人作成
+
+``` terminal:rails console
+>> User.create(name: "Michael Hartl", email: "mhartl@example.com", password: "foobar", password_confirmation: "foobar")
+```
+
+データベースに保存されたかを確認
+
+ - [DB Browser for SQLiteをinstall](http://sqlitebrowser.org/)
+ - [DB Browser for SQLiteの使い方](https://qiita.com/MZ1TB0ZSoVfeX9L/items/eba47bbf47d7d64de9a9)
+
+has_secure_passwordの効果を確認
+
+``` terminal:rails console
+>> user = User.find_by(email: "mhartl@example.com")
+>> user.password_digest
+=> "$2a$10$xxucoRlMp06RLJSfWpZ8hO8Dt9AZXlGRi3usP3njQg3yOcVFzb6oK"
+```
+
+authenticateメソッドの確認
+
+``` terminal:rails console
+>> user.authenticate("not_the_right_password")
+false
+
+>> user.authenticate("foobar")
+=> #<User id: 1, name: "Michael Hartl", email: "mhartl@example.com",
+created_at: "2016-05-23 20:36:46", updated_at: "2016-05-23 20:36:46",
+password_digest: "$2a$10$xxucoRlMp06RLJSfWpZ8hO8Dt9AZXlGRi3usP3njQg3...">
+
+# ログインするときは論理値で判定
+>> !!user.authenticate("foobar")
+=> true
+```
