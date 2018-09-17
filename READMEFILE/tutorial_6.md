@@ -539,3 +539,77 @@ class UserTest < ActiveSupport::TestCase
   end
 end
 ```
+
+## パスワードのセキュア化
+
+- ユーザーにパスワードとパスワードの確認を入力させ、ハッシュ化したものをデータベースに保存
+- ハッシュ化とはハッシュ関数を使って入力されたデータを元に戻せないデータにする
+- ユーザーの認証は、パスワードの送信、ハッシュ化、データベース内のハッシュ化された値との比較の手順
+
+### has_secure_password
+
+ - セキュアなパスワードの実装は```has_secure_password```というRailsのメソッドを使用
+ - セキュアにハッシュ化したパスワードを、データベース内のpassword_digestという属性に保存する
+ - 2つのペアの仮想的な属性 (passwordとpassword_confirmation) が使えるようになる
+ - 存在性と値が一致するかどうかのバリデーションも追加される
+ - authenticateメソッドが使えるようになる (引数の文字列がパスワードと一致するとUserオブジェクトを、間違っているとfalseを返すメソッド)
+ - モデル内にpassword_digestという属性がないと使えない
+
+#### password_digestの追加
+
+ ``` terminal
+ $ rails generate migration add_password_digest_to_users password_digest:string
+ ```
+
+※to_usersにすることで、usersテーブルにカラムを追加するマイグレーションがRailsによって自動的に作成される
+
+マイグレーションを実行
+
+``` terminal
+$ rails db:migrate
+```
+
+#### bcryptのinstall
+
+- has_secure_passwordを使ってパスワードをハッシュ化するためには、最先端のハッシュ関数である```bcrypt```が必要
+- パスワードを適切にハッシュ化することで、たとえ攻撃者によってデータベースからパスワードが漏れてしまった場合でも、Webサイトにログインされない
+
+''' ruby:Gemfile
+gem 'rails',          '5.1.6'
+gem 'bcrypt',         '3.1.12'
+```
+
+``` terminal
+$ bundle install
+```
+
+#### Userモデルにhas_secure_passwordを追加
+
+``` ruby:app/models/user.rb
+class User < ApplicationRecord
+  before_save { self.email = email.downcase }
+  validates :name, presence: true, length: { maximum: 50 }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, length: { maximum: 255 },
+                    format: { with: VALID_EMAIL_REGEX },
+                    uniqueness: { case_sensitive: false }
+  has_secure_password
+end
+```
+
+passwordとpassword_confirmationをテストに追加
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com",
+                     password: "foobar", password_confirmation: "foobar")
+  end
+  .
+  .
+  .
+end
+```
