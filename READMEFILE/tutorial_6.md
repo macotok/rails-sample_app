@@ -613,3 +613,34 @@ class UserTest < ActiveSupport::TestCase
   .
 end
 ```
+
+## パスワードの最小文字数設定
+
+- パスワードとパスワード確認に対して同時に代入
+- 空のパスワードを入力させないために存在性のバリデーション追加
+- has_secure_passwordメソッドは存在性のバリデーションもするが、新しくレコードが追加されたときだけに適用される
+- そのためパスワード更新用に```presence: true```を追加
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com",
+                     password: "foobar", password_confirmation: "foobar")
+  end
+  .
+  .
+  .
+  test "password should be present (nonblank)" do
+    @user.password = @user.password_confirmation = " " * 6
+    assert_not @user.valid?
+  end
+
+  test "password should have a minimum length" do
+    @user.password = @user.password_confirmation = "a" * 5
+    assert_not @user.valid?
+  end
+end
+```
