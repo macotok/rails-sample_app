@@ -416,3 +416,126 @@ end
 |\z | 文字列の末尾|
 |/ | 正規表現の終わりを示す|
 |i | 大文字小文字を無視するオプション|
+
+### validates unique
+
+#### dupメソッド
+
+メールアドレスの一意性を検証するために、メモリ上だけでなく実際にレコードをデータベースに登録する必要がある。
+まずは重複したメールアドレスからテストする。
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+  .
+  .
+  .
+  test "email addresses shuold be unique" do
+    duplicate_user = @user.dup
+    duplicate_user.email = @user.email.upcase
+    @user.save
+    assert_not duplicate_user.valid?
+  end
+end
+```
+
+ - @userと同じメールアドレスのユーザーは作成できないことを、@user.dupを使ってテスト
+ - dupは同じ属性を持つデータを複製するためのメソッド
+ - @userを保存した後では、複製されたユーザーのメールアドレスが既にデータベース内に存在するため、ユーザの作成は無効
+ - メールアドレスでは大文字小文字が区別されなし。したがって大文字を区別しないように```@user.email.upcase```と記述
+
+
+#### uniqueness: true
+
+メールアドレスの一意性を検証
+
+``` ruby:app/models/user.rb
+class User < ApplicationRecord
+  validates :name,  presence: true, length: { maximum: 50 }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, presence: true, length: { maximum: 255 },
+                    format: { with: VALID_EMAIL_REGEX },
+                    uniqueness: { case_sensitive: false }
+end
+```
+
+- メールアドレスの大文字小文字を区別した書き方```uniqueness: true```
+- メールアドレスの大文字小文字を無視した書き方```uniqueness: { case_sensitive: false }```
+
+### emailにindexを追加で重複を回避
+
+emailにindexを追加
+
+``` terminal
+$ rails generate migration add_index_to_users_email
+```
+
+メールアドレスの一意性のマイグレーションを定義
+
+- usersテーブルのemailカラムにインデックスを追加する```add_index```
+- オプション```のunique: true```を指定することで一意性を強制
+
+``` ruby:db/migrate/[timestamp]_add_index_to_users_email.rb
+class AddIndexToUsersEmail < ActiveRecord::Migration[5.0]
+  def change
+    add_index :users, :email, unique: true
+  end
+end
+```
+
+データベースをマイグレート
+
+``` terminal
+$ rails db:migrate
+```
+
+fixture内のサンプルデータを削除
+
+``` yaml:test/fixtures/users.yml
+# 空にする (既存のコードは削除する)
+```
+
+### email属性を小文字に変換する
+
+ - 文字列は同一であると解釈されるべきなので、データベースに保存される直前にすべての文字列を小文字に変換
+ - データベースに保存する前にemail属性を```before_save```で強制的に小文字に変換
+ - selfは現在のユーザーを指す
+ - こちらでも可。```before_save { email.downcase! }```
+
+ ``` ruby:app/models/user.rb
+ class User < ApplicationRecord
+   before_save { self.email = email.downcase }
+   validates :name,  presence: true, length: { maximum: 50 }
+   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+   validates :email, presence: true, length: { maximum: 255 },
+                     format: { with: VALID_EMAIL_REGEX },
+                     uniqueness: { case_sensitive: false }
+ end
+ ```
+
+#### メールアドレスの小文字化に対するテスト
+
+``` ruby:test/models/user_test.rb
+require 'test_helper'
+
+class UserTest < ActiveSupport::TestCase
+
+  def setup
+    @user = User.new(name: "Example User", email: "user@example.com")
+  end
+  .
+  .
+  .
+  test "email addresses should be saved as lower-case" do
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email
+    @user.save
+    assert_equal mixed_case_email.downcase, @user.reload.email
+  end
+end
+```
