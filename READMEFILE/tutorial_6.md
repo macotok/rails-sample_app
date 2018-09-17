@@ -19,7 +19,7 @@
 $ rails generate model User name:string email:string
 ```
 
-| users |
+|カラム|型|
 ----|----
 |id|integer|
 |name|string|
@@ -47,7 +47,7 @@ end
 - モデル名は単数形 (User) ですが、テーブル名は複数形 (users)
 - .timestampsは特別なコマンドで、created_atとupdated_atという２つの「マジックカラム (Magic Columns)」を作成(あるユーザーが作成または更新されたときに、その時刻を自動的に記録するタイムスタンプ)
 
-| users |
+|カラム|型|
 ----|----
 |id|integer|
 |name|string|
@@ -649,7 +649,7 @@ end
 
 データベースに新規ユーザーを1人作成
 
-``` terminal:rails console
+``` terminal:console
 >> User.create(name: "Michael Hartl", email: "mhartl@example.com", password: "foobar", password_confirmation: "foobar")
 ```
 
@@ -660,15 +660,16 @@ end
 
 has_secure_passwordの効果を確認
 
-``` terminal:rails console
+``` terminal:console
 >> user = User.find_by(email: "mhartl@example.com")
+
 >> user.password_digest
 => "$2a$10$xxucoRlMp06RLJSfWpZ8hO8Dt9AZXlGRi3usP3njQg3yOcVFzb6oK"
 ```
 
 authenticateメソッドの確認
 
-``` terminal:rails console
+``` terminal:console
 >> user.authenticate("not_the_right_password")
 false
 
